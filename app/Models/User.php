@@ -52,4 +52,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(SchedualedClass::class, 'instructor_id');
     }
+    function bookings()
+    {
+        return $this->belongsToMany(SchedualedClass::class, 'bookings');
+    }
 }

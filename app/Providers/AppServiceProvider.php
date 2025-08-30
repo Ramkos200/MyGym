@@ -21,9 +21,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        //instructor only
         Gate::define('schedual-class', function (User $user) {
             return $user->role === 'instructor';
+        });
+        //member only
+        Gate::define('book-class', function (User $user) {
+            return $user->role === 'member';
         });
     }
 }

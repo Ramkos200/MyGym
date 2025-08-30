@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Models\SchedualedClass;
@@ -13,17 +14,25 @@ Route::get('/', function () {
 //default dashboard
 Route::get('/dashboard', DashboardController::class)->middleware(['auth'])->name('dashboard');
 
-//dashboard rotues
+//Member rotues
+Route::middleware(['auth', 'role:member'])->group(function () {
+    Route::get('/member/dashboard', function () {
+        return view('member.dashboard');
+    })->name('member.dashboard');
+    Route::get('/member/book', [BookingController::class, 'display'])->name('booking.display');
+    Route::get('/member/bookings', [BookingController::class, 'index'])->name('booking.index');
+    Route::post('/member/bookings', [BookingController::class, 'store'])->name('booking.store');
+    Route::delete('/member/bookings/{id}', [BookingController::class, 'destroy'])->name('booking.destroy');
+});
 
-Route::get('/member/dashboard', function () {
-    return view('member.dashboard');
-})->middleware(['auth', 'role:member'])->name('member.dashboard');
-
-
+//instructor route
 Route::get('/instructor/dashboard', function () {
     return view('instructor.dashboard');
 })->middleware(['auth', 'role:instructor'])->name('instructor.dashboard');
 
+Route::resource('instructor/schedule', SchedualedClassesController::class)->only(['index', 'store', 'create', 'destroy'])->middleware(['auth', 'role:instructor']);
+
+//admin route
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->middleware(['auth', 'role:admin'])->name('admin.dashboard');
@@ -36,7 +45,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-//resource controllers route
-Route::resource('instructor/schedule', SchedualedClassesController::class)->only(['index', 'store', 'create', 'destroy'])->middleware(['auth', 'role:instructor']);
+
 
 require __DIR__ . '/auth.php';

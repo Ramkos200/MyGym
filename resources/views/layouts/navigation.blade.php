@@ -30,6 +30,19 @@
                 @endcan
             </div>
 
+            {{-- //member booking Classes naviagtion --}}
+            @can('book-class')
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('booking.display')" :active="request()->routeIs('booking.display')">
+                        {{ __('Book a Class') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('booking.index')" :active="request()->routeIs('booking.index')">
+                        {{ __('View Your Classes') }}
+                    </x-nav-link>
+                </div>
+            @endcan
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
